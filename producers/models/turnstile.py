@@ -29,10 +29,10 @@ class Turnstile(Producer):
         )
 
         super().__init__(
-            f"org.chicago.cta.turnstile.{station_name}",
+            f"org.chicago.cta.turnstile",
             key_schema=Turnstile.key_schema,
             value_schema=Turnstile.value_schema,
-            num_partitions=2,
+            num_partitions=1,
             num_replicas=1,
         )
         self.station = station

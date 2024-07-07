@@ -48,7 +48,6 @@ class KafkaConsumer:
                     "group.id": "0",
                     "auto.offset.reset": "earliest",
                 }
-
             )
 
         self.consumer.subscribe( 
@@ -79,11 +78,10 @@ class KafkaConsumer:
         """Polls for a message. Returns 1 if a message was received, 0 otherwise"""
         try:
             _ = self.consumer.poll(1.0)
+            return 1
         except SerializerError as e:
             logger.error(f"Error consuming message: {e}")
             return 0
-        logger.info("_consume is incomplete - skipping")
-        return 1
 
 
     def close(self):
