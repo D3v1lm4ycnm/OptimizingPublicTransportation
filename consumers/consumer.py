@@ -2,7 +2,7 @@
 import logging
 
 import confluent_kafka
-from confluent_kafka import Consumer
+from confluent_kafka import Consumer, OFFSET_BEGINNING
 from confluent_kafka.avro import AvroConsumer
 from confluent_kafka.avro.serializer import SerializerError
 from tornado import gen
@@ -33,7 +33,7 @@ class KafkaConsumer:
         self.broker_properties = {
             "bootstrap.servers": "PLAINTEXT://localhost:9092",
             "group.id": "0",
-            "auto.offset.reset": "earliest"
+            "auto.offset.reset": "earliest" if offset_earliest else "latest"
         }
 
         if is_avro is True:
@@ -60,8 +60,7 @@ class KafkaConsumer:
 
         logger.info("on_assign is incomplete - skipping")
         for partition in partitions:
-            partition.offset = 0
-
+            partition.offset = OFFSET_BEGINNING
 
         logger.info("partitions assigned for %s", self.topic_name_pattern)
         consumer.assign(partitions)
@@ -77,8 +76,17 @@ class KafkaConsumer:
     def _consume(self):
         """Polls for a message. Returns 1 if a message was received, 0 otherwise"""
         try:
-            _ = self.consumer.poll(1.0)
-            return 1
+            message = self.consumer.poll(self.consume_timeout)
+            if message is None:
+                logger.DEBUG("no message received")
+                return 0
+            elif message.error() is not None:
+                logger.ERROR(f"error from consumer {message.error()}")
+                return 0
+            else:
+                self.message_handler(message)
+                logger.INFO(f"Consumer Message Key :{message}")
+                return 1
         except SerializerError as e:
             logger.error(f"Error consuming message: {e}")
             return 0
