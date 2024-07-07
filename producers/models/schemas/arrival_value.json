@@ -1,0 +1,44 @@
+{
+  "type": "record",
+  "namespace": "com.udacity.arrival",
+  "name": "arrival.value",
+  "fields": [
+    {
+      "name": "station_id",
+      "type": "int",
+      "doc": "The ID of the station where the arrival is recorded."
+    },
+    {
+      "name": "train_id",
+      "type": "string",
+      "doc": "The ID of the arriving train."
+    },
+    {
+      "name": "direction",
+      "type": "string",
+      "doc": "The direction from which the train is arriving."
+    },
+    {
+      "name": "line",
+      "type": "string",
+      "doc": "The line on which the train operates."
+    },
+    {
+      "name": "train_status",
+      "type": "string",
+      "doc": "The current status of the train upon arrival."
+    },
+    {
+      "name": "prev_station_id",
+      "type": ["null", "int"],
+      "doc": "The ID of the previous station before arrival, if applicable.",
+      "default": null
+    },
+    {
+      "name": "prev_direction",
+      "type": ["null", "string"],
+      "doc": "The direction from the previous station, if applicable.",
+      "default": null
+    }
+  ]
+}

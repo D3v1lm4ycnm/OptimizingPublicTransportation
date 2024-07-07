@@ -1,0 +1,19 @@
+{
+  "type": "record",
+  "namespace": "com.udacity.turnstile",
+  "name": "turnstile.value",
+  "fields": [
+    {
+      "name": "station_id",
+      "type": "string"
+    },
+    {
+      "name": "station_name",
+      "type": "string"
+    },
+    {
+      "name": "line",
+      "type": "string"
+    }
+  ]
+}
